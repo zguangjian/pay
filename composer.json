@@ -1,0 +1,23 @@
+{
+  "name": "zguangjian/Pay",
+  "description": "Third party login extension package",
+  "keywords": [
+    "alipay",
+    "wachat"
+  ],
+  "authors": [
+    {
+      "name": "zguangjian",
+      "email": "zguangjian@outlook.com"
+    }
+  ],
+  "license": "MIT",
+  "require": {
+    "php": ">=5.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "zguangjian\\": "src/"
+    }
+  }
+}
