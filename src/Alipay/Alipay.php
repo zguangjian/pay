@@ -7,10 +7,9 @@
  * Email: zguangjian@outlook.com
  */
 
-namespace zguangjian\src;
+namespace zguangjian\src\Alipay;
 
 
-use zguangjian\Alipay\AlipayConfig;
 
 class Alipay
 {
@@ -64,15 +63,15 @@ class Alipay
      */
     public function gateway()
     {
-        $this->gatewayUrl = AlipayConfig::gatewayUrl;
+        $this->gatewayUrl = Config::gatewayUrl;
         $this->param = [
             'app_id' => $this->app_id,
-            'method' => AlipayConfig::method,
-            'charset' => AlipayConfig::charset,
-            'sign_type' => AlipayConfig::sign_type,
+            'method' => Config::method,
+            'charset' => Config::charset,
+            'sign_type' => Config::sign_type,
             'sign' => $this->ali_public_key,
             'timestamp' => date('Y-m-d H:i:s'),
-            'version' => AlipayConfig::version,
+            'version' => Config::version,
         ];
 
     }
@@ -82,7 +81,7 @@ class Alipay
      */
     public function dev()
     {
-        $this->gatewayUrl = AlipayConfig::gatewayDevUrl;
+        $this->gatewayUrl = Config::gatewayDevUrl;
     }
 
     public function pay($config_biz = [])

@@ -7,10 +7,10 @@
  * Email: zguangjian@outlook.com
  */
 
-namespace zguangjian\Alipay;
+namespace zguangjian\src\Alipay;
 
 
-class AlipayConfig
+class Config
 {
     /**
      * 正式支付接口url

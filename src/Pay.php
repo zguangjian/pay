@@ -7,11 +7,10 @@
  * Email: zguangjian@outlook.com
  */
 
-namespace zguangjian;
+namespace zguangjian\src;
 
-
-use zguangjian\src\Alipay;
-use zguangjian\src\Wechat;
+use zguangjian\src\Alipay\Alipay;
+use zguangjian\src\Wechat\Wechat;
 
 class Pay
 {
