@@ -10,7 +10,6 @@
 namespace zguangjian\src\Alipay;
 
 
-
 class Alipay
 {
     /**
@@ -55,7 +54,9 @@ class Alipay
 
     public function __construct($config)
     {
-        extract($config);
+        foreach ($config as $key => $value) {
+            !isset($this->$key) ?: $this->$key = $value;
+        }
     }
 
     /**
