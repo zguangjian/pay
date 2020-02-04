@@ -29,7 +29,7 @@ class Pay
 
     protected function create($method)
     {
-        $gateway = __NAMESPACE__ . '\\Gateway\\' . ucfirst($method);
+        $gateway = __NAMESPACE__ . '\\src\\Gateways\\' . ucfirst($method);
         if (class_exists($gateway)) {
             return self::make($gateway);
         }

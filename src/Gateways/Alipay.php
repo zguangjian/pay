@@ -7,7 +7,7 @@
  * Email: zguangjian@outlook.com
  */
 
-namespace zguangjian\Gateways;
+namespace zguangjian\src\Gateways;
 
 
 use zguangjian\Config;
