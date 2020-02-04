@@ -2,15 +2,15 @@
 /**
  * Created by PhpStorm.
  * User: zguangjian
- * Date: 2020/1/30
- * Time: 18:12
+ * Date: 2020/2/2
+ * Time: 14:49
  * Email: zguangjian@outlook.com
  */
 
-namespace zguangjian\src\Wechat;
+namespace zguangjian\Contracts;
 
 
-class Config
+interface GatewayInterface
 {
 
 }
