@@ -9,7 +9,6 @@
 
 namespace zguangjian\src\Gateways;
 
-
 use zguangjian\Contracts\GatewayApplicationInterface;
 
 class Wechat implements GatewayApplicationInterface

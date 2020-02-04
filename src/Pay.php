@@ -9,27 +9,36 @@
 
 namespace zguangjian\src;
 
+use zguangjian\Config;
 use zguangjian\Contracts\GatewayApplicationInterface;
 use zguangjian\Exceptions\InvalidGatewayException;
+use zguangjian\src\Gateways\Alipay;
 
+/**
+ * @method static Alipay alipay(array $config) 支付宝
+ * @method static Wechat wechat(array $config) 微信
+ */
 class Pay
 {
     protected $config;
 
     public function __construct($config)
     {
-        $this->config = $config;
+        $this->config = new Config($config);
     }
 
     public static function __callStatic($method, $param)
     {
+
         $app = new Self($param);
+
         return $app->create($method);
     }
 
     protected function create($method)
     {
-        $gateway = __NAMESPACE__ . '\\src\\Gateways\\' . ucfirst($method);
+        $gateway = __NAMESPACE__ . '\\Gateways\\' . ucfirst($method);
+
         if (class_exists($gateway)) {
             return self::make($gateway);
         }
@@ -38,7 +47,8 @@ class Pay
 
     protected function make($gateway)
     {
-        $app = new $gateway;
+        $app = new $gateway($this->config);
+        dd($app);
         if ($app instanceof GatewayApplicationInterface) {
             return $app;
         }
