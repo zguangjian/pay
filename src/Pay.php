@@ -27,11 +27,9 @@ class Pay
         $this->config = new Config($config);
     }
 
-    public static function __callStatic($method, $param)
+    public static function __callStatic($method, $params)
     {
-
-        $app = new Self($param);
-
+        $app = new self(...$params);
         return $app->create($method);
     }
 
@@ -48,7 +46,6 @@ class Pay
     protected function make($gateway)
     {
         $app = new $gateway($this->config);
-        dd($app);
         if ($app instanceof GatewayApplicationInterface) {
             return $app;
         }

@@ -43,6 +43,7 @@ class Alipay implements GatewayApplicationInterface
 
     public function __construct(Config $config)
     {
+
         $this->gateway = Alipay::URL[$config->get('model', self::MODE_NORMAL)];
         $this->payload = [
             'app_id' => $config->get('app_id'),
@@ -62,7 +63,10 @@ class Alipay implements GatewayApplicationInterface
 
     public function __call($method, $params)
     {
-        return $this->pay($method, $params);
+        if (isset($this->extends[$method])) {
+            return $this->makeExtend($method, ...$params);
+        }
+        return $this->pay($method, ...$params);
     }
 
 
@@ -75,6 +79,7 @@ class Alipay implements GatewayApplicationInterface
 
         $this->payload['biz_content'] = json_encode($params);
         $gateway = get_class($this) . '\\' . ucfirst($gateway) . 'Gateway';
+        dd($gateway);
         if (class_exists($gateway)) {
             return $this->makePay($gateway);
         }
@@ -90,6 +95,36 @@ class Alipay implements GatewayApplicationInterface
             }));
         }
         throw new InvalidGatewayException("Pay Gateway [{$gateway}] Must Be An Instance Of GatewayInterface");
+    }
+
+    public function find($order, string $type)
+    {
+        // TODO: Implement find() method.
+    }
+
+    public function refund(array $order)
+    {
+        // TODO: Implement refund() method.
+    }
+
+    public function cancel($order)
+    {
+        // TODO: Implement cancel() method.
+    }
+
+    public function close($order)
+    {
+        // TODO: Implement close() method.
+    }
+
+    public function verify($content, bool $refund)
+    {
+        // TODO: Implement verify() method.
+    }
+
+    public function success()
+    {
+        // TODO: Implement success() method.
     }
 
 }
