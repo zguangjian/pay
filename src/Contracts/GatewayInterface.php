@@ -12,5 +12,11 @@ namespace zguangjian\Contracts;
 
 interface GatewayInterface
 {
-
+    /**
+     * Pay an order.
+     * @param string $endpoint
+     * @param array  $payload
+     * @return Collection|Response
+     */
+    public function pay($endpoint, $payload);
 }
