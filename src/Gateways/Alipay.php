@@ -14,6 +14,7 @@ use zguangjian\Config;
 use zguangjian\Contracts\GatewayApplicationInterface;
 use zguangjian\Contracts\GatewayInterface;
 use zguangjian\Exceptions\InvalidGatewayException;
+use zguangjian\src\Gateways\Alipay\Support;
 
 /**
  * @method Response app(array $config) APP 支付
@@ -31,8 +32,8 @@ class Alipay implements GatewayApplicationInterface
     const MODE_DEV = "dev";
 
     const URL = [
-        self::MODE_NORMAL => 'https://openapi.alipay.com/gateway.do',
-        self::MODE_DEV => 'https://openapi.alipaydev.com/gateway.do',
+        self::MODE_NORMAL => 'https://openapi.alipay.com/gateway.do?charset=utf-8',
+        self::MODE_DEV => 'https://openapi.alipaydev.com/gateway.do?charset=utf-8',
     ];
 
     protected $payload;
@@ -43,12 +44,11 @@ class Alipay implements GatewayApplicationInterface
 
     public function __construct(Config $config)
     {
-
-        $this->gateway = Alipay::URL[$config->get('model', self::MODE_NORMAL)];
+        $this->gateway = Support::create($config)->getBaseUri();
         $this->payload = [
             'app_id' => $config->get('app_id'),
             'method' => '',
-            'format' => 'json',
+            'format' => 'JSON',
             'charset' => 'utf-8',
             'sign_type' => 'RSA2',
             'version' => '1.0',
@@ -79,7 +79,6 @@ class Alipay implements GatewayApplicationInterface
 
         $this->payload['biz_content'] = json_encode($params);
         $gateway = get_class($this) . '\\' . ucfirst($gateway) . 'Gateway';
-
 
         if (class_exists($gateway)) {
             return $this->makePay($gateway);

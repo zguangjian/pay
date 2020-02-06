@@ -11,6 +11,7 @@ namespace zguangjian\src\Gateways\Alipay;
 
 
 use zguangjian\Config;
+use zguangjian\Exceptions\InvalidGatewayException;
 use zguangjian\src\Gateways\Alipay;
 
 class Support
@@ -34,8 +35,7 @@ class Support
 
     public static function create(Config $config)
     {
-        dd($config);
-        if (php_sapi_name() === 'cli' || (self::$instance instanceof self)) {
+        if (php_sapi_name() === 'cli' || !(self::$instance instanceof self)) {
             self::$instance = new self($config);
         }
         return self::$instance;
@@ -52,10 +52,48 @@ class Support
         return $default;
     }
 
+    //生成sign
     public static function generateSign($payload)
     {
-        dd(self::$instance);
-       $private_key = self::$instance->private_key;
+        $private_key = self::$instance->private_key;
+        if (is_null($private_key)) {
+            throw new InvalidGatewayException('Missing Alipay Config -- [private_key]');
+        }
+        $privateKey = "-----BEGIN RSA PRIVATE KEY-----\n" .
+            wordwrap($private_key, 64, "\n", true) .
+            "\n-----END RSA PRIVATE KEY-----";
+        //生成sign
+        openssl_sign(self::getSignContent($payload), $sign, $privateKey, OPENSSL_ALGO_SHA256);
+        //sign需要base64
+        openssl_sign(self::getSignContent($payload), $sign, $privateKey, OPENSSL_ALGO_SHA256);
 
+        $sign = base64_encode($sign);
+        if (is_resource($privateKey)) {
+            openssl_free_key($privateKey);
+        }
+        return $sign;
+
+    }
+
+    public function getBaseUri()
+    {
+        return $this->baseUri;
+    }
+
+    public static function getSignContent($param = [], $verify = false)
+    {
+        krsort($param);
+
+        $strToBeSign = "";
+        foreach ($param as $key => $value) {
+            if (!$verify && $value != "" && !is_null($value) && $key != 'sign' && '@' != substr($value, 0, 1)) {
+                $strToBeSign .= $key . "=" . $value . '&';
+            }
+
+            if ($verify && $key != 'sign' && $key != 'sign_type') {
+                $strToBeSign .= $key . '=' . $value . '&';
+            }
+        }
+        return trim($strToBeSign, '&'); //返回 去掉头尾&符号的字符串
     }
 }
