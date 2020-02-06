@@ -47,6 +47,6 @@ class WebGateway implements GatewayInterface
         }
         $html .= "<input type='submit' value='ok' style='display:none;'></form>";
         $html .= "<script>document.forms['alipay_submit'].submit();</script>";
-        return $html;
+        return Response::create($sHtml);
     }
 }

@@ -59,20 +59,18 @@ class Support
         if (is_null($private_key)) {
             throw new InvalidGatewayException('Missing Alipay Config -- [private_key]');
         }
-        $privateKey = "-----BEGIN RSA PRIVATE KEY-----\n" .
+        $private_key = "-----BEGIN RSA PRIVATE KEY-----\n" .
             wordwrap($private_key, 64, "\n", true) .
             "\n-----END RSA PRIVATE KEY-----";
         //生成sign
-        openssl_sign(self::getSignContent($payload), $sign, $privateKey, OPENSSL_ALGO_SHA256);
-        //sign需要base64
-        openssl_sign(self::getSignContent($payload), $sign, $privateKey, OPENSSL_ALGO_SHA256);
+        openssl_sign(self::getSignContent($payload), $sign, $private_key, OPENSSL_ALGO_SHA256);
 
         $sign = base64_encode($sign);
-        if (is_resource($privateKey)) {
-            openssl_free_key($privateKey);
+
+        if (is_resource($private_key)) {
+            openssl_free_key($private_key);
         }
         return $sign;
-
     }
 
     public function getBaseUri()
@@ -82,7 +80,7 @@ class Support
 
     public static function getSignContent($param = [], $verify = false)
     {
-        krsort($param);
+        ksort($param);
 
         $strToBeSign = "";
         foreach ($param as $key => $value) {
